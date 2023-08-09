@@ -20,16 +20,7 @@ export const getPost = async ({ slug }) => {
 };
 
 export const addPost = async (post) => {
-  //Handle add post here
-  let uploadedImage = ""
-  const  { image, ...postData } = post;
-  if (image) {
-    const { publicUrl, error } = await uploadImage(image);
-
-    if (!error) {
-      uploadedImage = publicUrl;
-    }
-  }
+  const { image, ...postData } = post;
 
   const newPost = {
     id: crypto.randomUUID(),
@@ -37,16 +28,9 @@ export const addPost = async (post) => {
     title: postData.title,
     slug: postData.slug,
     image,
-  }
-  
-  console.log(newPost)
+  };
 
-  const { data, error, status } = await supabase
-    .from('posts')
-    .insert([newPost])
-
-
-  console.log(data, error, status)
+  const { data, error, status } = await supabase.from("posts").insert(newPost);
   return { data, error, status };
 };
 

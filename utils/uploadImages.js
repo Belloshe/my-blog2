@@ -1,41 +1,35 @@
-import { supabase } from "@supabase/auth-ui-shared";
-import { SupabaseAuthClient } from "@supabase/supabase-js/dist/module/lib/SupabaseAuthClient";
-
+import { supabase } from "../lib/supabaseClient";
 
 export const uploadImage = async (file) => {
-    console.log(file);
+  console.log(file);
 
-    const fullFileName = file.name.split(".")
-    const fileName = fullFileName[0]
-    const fileExt = fullFileName[1]
-    console.log({fileName, fileExt});
+  const fullFileName = file.name.split(".");
+  const fileName = fullFileName[0];
+  const fileExt = fullFileName[1];
 
-const filePath = `${fileName}-${Math.random()}.${fileExt}`;
+  const filePath = `${fileName}-${Math.random()}.${fileExt}`;
 
+  const { data, error } = await supabase.storage
+    .from("images")
+    .upload(filePath, file, {
+      cacheControl: "3600",
+      upsert: false,
+    });
 
-const { data, error } = await supabase
-.storage
-.from('images')
-.upload(filePath, file,{
-    cacheControl: '3600',
-    upsert: false
-});
-
-if(error) {
+  if (error) {
     return { error };
-}
+  }
 
-const { data: { PublicUrl }, error: publicUrlError}  = await supabase
-.storage
-.from('images')
-.getPublicUrl(data.path);
+  const {
+    data: { publicUrl, error: publicUrlError },
+  } = await supabase.storage.from("images").getPublicUrl(data.path);
 
-if(publicUrlError) {
+  if (publicUrlError) {
     return { error: publicUrlError };
-}
+  }
 
-return {
+  return {
     error: false,
-    PublicUrl,
-};
+    publicUrl,
+  };
 };
