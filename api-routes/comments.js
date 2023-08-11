@@ -1,21 +1,25 @@
-// comments.js
+import { supabase } from "@/lib/supabaseClient";
 
-// A simple array to store comments as placeholders
-const comments = [];
+//postId = "id på posten";
+export const getComments = async (postId) => {
+  const { data, error } = await supabase
+    .from("comments")
+    .select("*")
+    .eq("post_id", postId);
 
-export const getComments = () => {
-  // Return all comments
-  return comments;
+  return data;
 };
 
-export const addComment = (newComment) => {
-  // Add a new comment to the array
-  comments.push(newComment);
+//newComment = {author, comment, post_id}
+export const addComment = async (newComment) => {
+  const { data, error } = await supabase.from("comments").insert(newComment);
+
+  return data;
 };
 
-export const removeComment = (commentIndex) => {
-  // Remove the comment at the specified index from the array
-  if (commentIndex >= 0 && commentIndex < comments.length) {
-    comments.splice(commentIndex, 1);
-  }
+//id = "id på kommentaren";
+export const removeComment = async (id) => {
+  const { data, error } = await supabase.from("comments").delete().eq("id", id);
+
+  return data;
 };

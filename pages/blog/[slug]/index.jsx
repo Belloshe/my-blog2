@@ -1,3 +1,4 @@
+// BlogPost.jsx
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import styles from "./blog-post.module.css";
@@ -6,7 +7,10 @@ import AddComment from "./partials/add-comment";
 import Button from "@components/button";
 import Heading from "@components/heading";
 import BlogImageBanner from "@components/blog-image-banner";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import {
+  createClientComponentClient,
+  createClientComponent,
+} from "@supabase/auth-helpers-nextjs";
 
 export default function BlogPost() {
   const router = useRouter();
@@ -14,7 +18,7 @@ export default function BlogPost() {
   const [post, setPost] = useState(null);
   const [user, setUser] = useState(null);
   const [postUser, setPostUser] = useState(null);
-
+  
   const supabase = createClientComponentClient();
 
   useEffect(() => {
@@ -27,7 +31,7 @@ export default function BlogPost() {
       if (error) console.log("Error fetching post: ", error);
       if (data && data.length > 0) {
         const post = data[0];
-        console.log(post)
+        console.log(post);
         setPost(post);
       }
     };
@@ -51,9 +55,9 @@ export default function BlogPost() {
       .from("posts")
       .delete()
       .eq("id", post.id);
-      
+
     if (error) {
-      console.error('Error:', error.message);
+      console.error("Error:", error.message);
     } else {
       router.push("/blog");
     }
@@ -83,10 +87,9 @@ export default function BlogPost() {
           </div>
         )}
       </section>
-
+      
       <Comments postId={post.id} />
 
-      {user && <AddComment postId={post.id} />}
     </>
   );
 }

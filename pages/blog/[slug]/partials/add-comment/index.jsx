@@ -6,7 +6,7 @@ import Label from "@components/label";
 import TextArea from "@components/text-area";
 import styles from "./add-comment.module.css";
 
-export default function AddComment({ postId }) {
+export default function AddComment({ postId, addComment }) {
   const formRef = useRef(); // create a reference
   const [user, setUser] = useState(null);
   const supabase = createClientComponentClient();
@@ -43,6 +43,7 @@ export default function AddComment({ postId }) {
 
     if (response.ok) {
       console.log("Comment created successfully");
+      addComment(commentData)
     } else {
       console.error("Error creating comment:", response.statusText);
     }

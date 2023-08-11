@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import AddComment from "../add-comment"
 import styles from "./comments.module.css";
 import Comment from "../comment";
 
@@ -7,20 +8,24 @@ export default function Comments({ postId }) {
 
   useEffect(() => {
     const fetchComments = async () => {
-      const response = await fetch(`/api/comments?postId=${postId}`);
-      if (response.ok) {
-        const data = await response.json();
-        setComments(data);
-      } else {
-        console.error('Error:', response.status, response.statusText);
+      try {
+        const commentsData = await getComments(postId);
+        setComments(commentsData);
+      } catch (error) {
+        console.error('Error fetching comments:', error);
       }
     };
 
     fetchComments();
   }, [postId]);
 
+  const handleAddNewComment = (newComment) => {
+    console.log(newComment);
+  };
+
   return (
     <div className={styles.container}>
+      <AddComment postId={postId} addComment={handleAddNewComment} />
       <h2>Comments</h2>
       {comments.map((comment) => (
         <Comment key={comment.id} {...comment} />
@@ -28,3 +33,4 @@ export default function Comments({ postId }) {
     </div>
   );
 }
+
