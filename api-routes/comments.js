@@ -10,11 +10,22 @@ export const getComments = async (postId) => {
   return data;
 };
 
-//newComment = {author, comment, post_id}
 export const addComment = async (newComment) => {
-  const { data, error } = await supabase.from("comments").insert(newComment);
+
+  const { data, error } = await supabase
+
+    .from("comments")
+
+    .insert(newComment)
+
+    .select()
+
+    .single();
+
+ 
 
   return data;
+
 };
 
 //id = "id på kommentaren";

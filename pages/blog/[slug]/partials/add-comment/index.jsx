@@ -34,12 +34,33 @@ export default function AddComment({ postId, addComment }) {
       comment,
       post_id: postId,
     };
+const response = await fetch("/api/comments", {
 
-    const response = await fetch("/api/comments", {
       method: "POST",
+
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(commentData)
+
+      body: JSON.stringify(commentData),
+
     });
+
+ 
+
+    const addedComment = await response.json(); // Here you get the actual response data
+
+ 
+
+    if (response.ok) {
+
+      console.log("Comment created successfully");
+
+      addComment(addedComment);
+
+    } else {
+
+      console.error("Error creating comment:", response.statusText);
+
+    }
 
     if (response.ok) {
       console.log("Comment created successfully");

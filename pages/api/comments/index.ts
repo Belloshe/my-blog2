@@ -3,9 +3,14 @@ import { getComments, addComment, removeComment } from "../../../api-routes/comm
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   console.log(req)
-  if (req.method === 'GET') {
-    const comments = await getComments();
+   if (req.method === "GET") {
+
+    const { postId } = req.query;
+
+    const comments = await getComments(postId);
+
     return res.status(200).json(comments);
+
   }
 
   if (req.method === 'POST') {

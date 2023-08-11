@@ -7,16 +7,36 @@ export default function Comments({ postId }) {
   const [comments, setComments] = useState([]);
 
   useEffect(() => {
-    const fetchComments = async () => {
-      try {
-        const commentsData = await getComments(postId);
-        setComments(commentsData);
-      } catch (error) {
-        console.error('Error fetching comments:', error);
-      }
-    };
 
+    const fetchComments = async () => {
+
+      try {
+
+ 
+
+        const response = await fetch(`/api/comments?postId=${postId}`, {
+
+          method: "GET",
+
+          headers: { "Content-Type": "application/json" },
+
+        });
+
+        const commentsData = await response.json(); // Here you get the actual response data
+
+ 
+
+        setComments(commentsData);
+
+      } catch (error) {
+
+        console.error("Error fetching comments:", error);
+
+      }
+
+    };
     fetchComments();
+
   }, [postId]);
 
   const handleAddNewComment = (newComment) => {
